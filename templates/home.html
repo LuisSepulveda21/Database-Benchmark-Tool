@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <style>
+    .chart-container {
+        float:left;
+        width: 320px;
+        height:480px;
+        padding: 1%;
+        }
+
+    </style>
+
+    <title>Document</title>
+</head>
+
+
+<body>
+    <h4 class="center-align">Send Database Information:</h4>
+
+
+    <form action="{% url 'query' %}" method="get">
+
+
+        <div class="center-align">
+            <button class="btn waves-effect waves-light" 
+            type="submit" name="operation" value="insert"> Insert Query
+            <i class="material-icons right">send</i>
+            </button>
+            <br><br>
+
+            <button class="btn waves-effect waves-light" 
+            type="submit" name="operation" value="delete"> Delete Query
+            <i class="material-icons right">send</i>
+            </button>
+            <br><br>
+
+            <button class="btn waves-effect waves-light" 
+            type="submit" name="operation" value="update"> Update Query
+            <i class="material-icons right">send</i>
+            </button>
+            <br><br>
+
+            <button class="btn waves-effect waves-light" 
+            type="submit" name="operation" value="nested"> Nested Query
+            <i class="material-icons right">send</i>
+            </button>
+            <br><br>
+
+            <div class="row" style="width:150px;">
+                    <select name="database">
+                      <option value="sqlite" >SQLite</option>
+                      <option value="postgre">PostgreSQL</option>
+                      <option value="mysql">MySQL</option>
+                    </select>
+                    <label>Materialize Select</label>
+                  </div>
+                  <br>
+
+
+        </div>
+    </form>
+
+ 
+<div id="containter">
+    <div class="chart-container">
+    <canvas id="InsertChart" width="800" height="450"></canvas>
+    </div>
+
+    <div class="chart-container">
+    <canvas id="DeleteChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+    <canvas id="UpdateChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+    <canvas id="NestedChart"></canvas>
+    </div>
+</div>
+
+
+
+   
+
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+
+    <script>
+    function ChartFunction(ChartName,values,name){
+        var ctx = document.getElementById(ChartName).getContext('2d');
+
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ["SQLite", "PostgreSQL", "MySQL"],
+                datasets: [{
+                    label: "Execution time",
+                    data: [values[0],values[1],values[2]],
+                    backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                legend: { display: false },
+                title: {
+                    display: true,
+                    text: name
+                       },
+                scales: {
+                     yAxes: [{
+                        ticks: {
+                          beginAtZero:true
+                               }
+                             }]
+                        },
+                responsive:true,
+                maintainAspectRatio: false
+            }
+        });
+      }
+    </script>
+
+    <script>
+    var values = ["{{sqliteINS}}","{{postgreINS}}","{{mysqlINS}}"]
+    ChartFunction("InsertChart",values,'Insert Query')
+    </script>
+
+    <script>
+    var values = ["{{sqliteDEL}}","{{postgreDEL}}","{{mysqlDEL}}"]
+    ChartFunction("DeleteChart",values,'Delete Query')
+    </script>
+
+    <script>
+    var values = ["{{sqliteUPD}}","{{postgreUPD}}","{{mysqlUPD}}"]
+    ChartFunction("UpdateChart",values,'Update Query')
+    </script>
+
+    <script>
+    var values = ["{{sqliteNES}}","{{postgreNES}}","{{mysqlNES}}"]
+    ChartFunction("NestedChart",values,'Nested Query')
+    </script>
+
+    
+
+    <script>
+         $(document).ready(function(){
+         $('select').formSelect();
+         });
+     </script>
+
+</body>
+</html>
