@@ -26,21 +26,21 @@ def my_custom_sql(request):
     cursor = connections[db_motor].cursor()
     average = 0
 
-    """ if(db_motor == 'sqlite'):
+    if(db_motor == 'sqlite'):
         cursor.execute("PRAGMA synchronous = OFF")
-        cursor.execute("BEGIN TRANSACTION")  """
+        cursor.execute("BEGIN TRANSACTION") 
 
 
 
 
-    '--------------INSERT QUERY----------------------'
+
 
     if(request.GET.get('operation') == 'insert'):
-        fake = Faker()
         data = []
 
         for i in range(100):
-            data.append(('MisterPickle','Manyoma','juanfegmail.com','M','CO','Barranquilla'))
+            data.append(('Juan','Perez','juan.com','M','CO','Barranquilla'))
+            data.append(('Maria','Rodriguez','maria.com','F','MX','Monterrey'))
 
         for i in range(10):
             start = time.time()
@@ -62,6 +62,7 @@ def my_custom_sql(request):
         for i in range(10):
             start = time.time()
             cursor.execute('''DELETE FROM information WHERE country LIKE '%CO%' ''')
+            cursor.execute('''DELETE FROM information WHERE country LIKE '%MX%' ''')
             connections[db_motor].commit()
             end = time.time()
             average = average + (end-start)
